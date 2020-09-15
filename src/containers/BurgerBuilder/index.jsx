@@ -2,6 +2,9 @@ import React, { Fragment, useEffect, useState } from "react";
 import { connect } from 'react-redux'
 import axios from 'axios';
 import './style.css'
+
+import { loadIngredients } from './../../store/actions/index';
+
 import Burger from "../../components/Burger";
 import Controls from "../../components/Controls";
 import Example from "../../components/Modal";
@@ -22,18 +25,19 @@ const BurgerBuilder = props => {
     const [show, setShow] = useState(false);
 
     useEffect(() => {
-        axios.get('https://todo-app-dev-by-washi.firebaseio.com/ingredients.json')
-            .then(res =>{
-                let data = [];
-                for(let key in res.data) {
-                    data.push({
-                        name: key,
-                        value: res.data[key]
-                    })
-                }
-                setIngredients(data);
-            })
-            .catch(err => console.log(err))
+        props.onLoadIngredient();
+        // axios.get('/ingredients.json')
+        //     .then(res =>{
+        //         let data = [];
+        //         for(let key in res.data) {
+        //             data.push({
+        //                 name: key,
+        //                 value: res.data[key]
+        //             })
+        //         }
+        //         setIngredients(data);
+        //     })
+        //     .catch(err => console.log(err))
         //eslint-disable-next-line
     },[]);
 
@@ -74,8 +78,6 @@ const BurgerBuilder = props => {
     const validateOrder = () => {
        return !ingredients.some(item => item.value !== 0);
     }
-
-    console.log("loading all props", props);
 
     return (
 
@@ -131,7 +133,11 @@ const BurgerBuilder = props => {
 
 const mapStateToProps = state =>({
     userName: state
+});
+
+const mapDispatchToProps = dispatch => ({
+    onLoadIngredient: () => dispatch(loadIngredients())
 })
 
 
-export default connect(mapStateToProps,null)(BurgerBuilder);
+export default connect(mapStateToProps,mapDispatchToProps)(BurgerBuilder);

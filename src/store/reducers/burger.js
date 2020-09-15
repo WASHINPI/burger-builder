@@ -1,7 +1,14 @@
 import { USER_NAME } from "../actionTypes";
 
 const initialState = {
-    user: "washi"
+    ingredients: []
+}
+
+const priceList = {
+    cheese: 0.60,
+    meat:  0.50,
+    bacon: 0.30,
+    salad: 0.70
 }
 
 function todoApp(state=initialState,action) {
