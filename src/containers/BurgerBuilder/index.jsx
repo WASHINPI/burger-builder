@@ -1,8 +1,10 @@
 import React, { Fragment, useEffect, useState } from "react";
+import { connect } from 'react-redux'
 import axios from 'axios';
 import './style.css'
 import Burger from "../../components/Burger";
 import Controls from "../../components/Controls";
+import Example from "../../components/Modal";
 
 const BurgerBuilder = props => {
 
@@ -16,6 +18,8 @@ const BurgerBuilder = props => {
          bacon:0.30,
          salad: .70
     })
+
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
         axios.get('https://todo-app-dev-by-washi.firebaseio.com/ingredients.json')
@@ -31,7 +35,10 @@ const BurgerBuilder = props => {
             })
             .catch(err => console.log(err))
         //eslint-disable-next-line
-    },[])
+    },[]);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const incrementIng = (ing) => {
 
@@ -67,6 +74,8 @@ const BurgerBuilder = props => {
     const validateOrder = () => {
        return !ingredients.some(item => item.value !== 0);
     }
+
+    console.log("loading all props", props);
 
     return (
 
@@ -104,11 +113,25 @@ const BurgerBuilder = props => {
                     more={() => incrementIng('salad')}
                     disable={checkQty('salad')}
                 />
+                <Example
+                    show={show}
+                    handleClose={handleClose}
+                    ingredients={ingredients}
+                    price={price.toFixed(2)}
+                />
 
-                <button className="OrderNowBtn" disabled={validateOrder()}>Order Now</button>
+                <button
+                    className="OrderNowBtn"
+                    onClick={handleShow}
+                    disabled={validateOrder()}>Order Now</button>
             </div>
         </Fragment>
     )
 }
 
-export default BurgerBuilder;
+const mapStateToProps = state =>({
+    userName: state
+})
+
+
+export default connect(mapStateToProps,null)(BurgerBuilder);
