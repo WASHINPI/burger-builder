@@ -1,1 +1,3 @@
-export const USER_NAME ='USER_NAME';
+export const LOAD_INGREDIENTS = "LOAD_INGREDIENTS";
+export const INCREMENTS = "INCREMENTS";
+export const DECREMENTS = "DECREMENTS";

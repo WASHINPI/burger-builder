@@ -1,7 +1,8 @@
-import { USER_NAME } from "../actionTypes";
+import { LOAD_INGREDIENTS, INCREMENTS, DECREMENTS } from "../actionTypes";
 
 const initialState = {
-    ingredients: []
+    ingredients: [],
+    price: 5
 }
 
 const priceList = {
@@ -11,14 +12,36 @@ const priceList = {
     salad: 0.70
 }
 
-function todoApp(state=initialState,action) {
+const reducer = (state=initialState,action) => {
 
     switch (action.type) {
-        case USER_NAME:
-            return state;
+        case LOAD_INGREDIENTS:
+            return {
+                ...state,
+                ingredients: action.payload
+            }
+        case INCREMENTS:
+            const data = [...state.ingredients]
+            return {
+                ...state,
+                // ingredients: {
+                //     ...state.ingredients,
+                //     [action.payload]: state.ingredients[action.payload] + 1
+                // },
+                // price: state.price + priceList[action.payload]
+            }
+        case DECREMENTS:
+            return {
+                ...state,
+                ingredients: {
+                    ...state.ingredients,
+                    [action.payload]: state.ingredients[action.payload] - 1
+                },
+                price: state.price - priceList[action.payload]
+            }
     }
 
     return state;
 }
 
-export default todoApp;
+export default reducer;

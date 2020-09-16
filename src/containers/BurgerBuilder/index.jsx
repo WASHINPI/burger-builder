@@ -1,9 +1,8 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { connect } from 'react-redux'
-import axios from 'axios';
 import './style.css'
 
-import { loadIngredients } from './../../store/actions/index';
+import {decrementsIngredients, incrementsIngredients, loadIngredients} from './../../store/actions/index';
 
 import Burger from "../../components/Burger";
 import Controls from "../../components/Controls";
@@ -11,9 +10,7 @@ import Example from "../../components/Modal";
 
 const BurgerBuilder = props => {
 
-    const [ingredients, setIngredients] = useState([]);
-
-    const[price, setPrice] = useState(4)
+   // const[price, setPrice] = useState(4)
 
     const [ingPrice, setIngPrice] = useState({
         cheese: 0.60,
@@ -26,18 +23,6 @@ const BurgerBuilder = props => {
 
     useEffect(() => {
         props.onLoadIngredient();
-        // axios.get('/ingredients.json')
-        //     .then(res =>{
-        //         let data = [];
-        //         for(let key in res.data) {
-        //             data.push({
-        //                 name: key,
-        //                 value: res.data[key]
-        //             })
-        //         }
-        //         setIngredients(data);
-        //     })
-        //     .catch(err => console.log(err))
         //eslint-disable-next-line
     },[]);
 
@@ -46,47 +31,56 @@ const BurgerBuilder = props => {
 
     const incrementIng = (ing) => {
 
-        let newIng = ingredients.map(item => {
-            if(item.name === ing ) {
-                item.value = item.value + 1;
-            }
-            return item;
-        })
-        const totalPrice = price + ingPrice[ing]
-        setPrice(totalPrice)
-        setIngredients(newIng)
+        props.increments(ing);
+
+        // let newIng = props.ingredients.map(item => {
+        //     if(item.name === ing ) {
+        //         item.value = item.value + 1;
+        //     }
+        //     return item;
+        // })
+
+       // const totalPrice = props.price + ingPrice[ing]
+       // setPrice(totalPrice)
+       // setIngredients(newIng)
     }
 
     const decrementIng = (ing) => {
 
-        let newIng = ingredients.map(item => {
-            if(item.name === ing ) {
-                item.value = item.value - 1;
-            }
-            return item;
-        })
+        props.decrements(ing);
 
-        const totalPrice = price - ingPrice[ing]
-        setPrice(totalPrice)
-        setIngredients(newIng)
+        // let newIng = props.ingredients.map(item => {
+        //     if(item.name === ing ) {
+        //         item.value = item.value - 1;
+        //     }
+        //     return item;
+        // })
+        //
+        // const totalPrice = props.price - ingPrice[ing]
+      //  setPrice(totalPrice)
+      //  setIngredients(newIng)
     }
 
     const checkQty = (ing) => {
-       return !ingredients.some(item => item.name === ing && item.value >= 1)
+      // return !props.ingredients.some(item => item.name === ing && item.value >= 1)
+        return false
     }
 
     const validateOrder = () => {
-       return !ingredients.some(item => item.value !== 0);
+      // return !props.ingredients.some(item => item.value !== 0);
+        return false;
     }
+
+    console.log("this is props",props.ingredients )
 
     return (
 
         <Fragment>
 
-            <Burger ingredients={ ingredients }/>
+            <Burger ingredients={ props.ingredients }/>
 
             <div className="BurgerControl">
-                <p>Current Price <b>{price.toFixed(2)}</b></p>
+                <p>Current Price <b>{props.price.toFixed(2)}</b></p>
 
                 <Controls
                     label="Cheese"
@@ -118,8 +112,8 @@ const BurgerBuilder = props => {
                 <Example
                     show={show}
                     handleClose={handleClose}
-                    ingredients={ingredients}
-                    price={price.toFixed(2)}
+                    ingredients={props.ingredients}
+                    price={props.price.toFixed(2)}
                 />
 
                 <button
@@ -132,11 +126,14 @@ const BurgerBuilder = props => {
 }
 
 const mapStateToProps = state =>({
-    userName: state
+    ingredients: state.ingredients,
+    price: state.price
 });
 
 const mapDispatchToProps = dispatch => ({
-    onLoadIngredient: () => dispatch(loadIngredients())
+    onLoadIngredient: () => dispatch(loadIngredients()),
+    increments: (data) => dispatch(incrementsIngredients(data)),
+    decrements: data => dispatch(decrementsIngredients(data))
 })
 
 
