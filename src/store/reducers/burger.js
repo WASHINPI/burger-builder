@@ -12,6 +12,36 @@ const priceList = {
     salad: 0.70
 }
 
+const updateIncrements = (ingredients,data) => {
+
+    const updatedIngredient = [...ingredients]
+
+    updatedIngredient.map(item => {
+        if(item.name === data) {
+            item.value = item.value + 1
+        }
+        return item;
+    })
+
+    return updatedIngredient;
+
+}
+
+const updateDecrements = (ingredients,data) => {
+
+    const updatedIngredient = [...ingredients]
+
+    updatedIngredient.map(item => {
+        if(item.name === data) {
+            item.value = item.value - 1
+        }
+        return item;
+    })
+
+    return updatedIngredient;
+
+}
+
 const reducer = (state=initialState,action) => {
 
     switch (action.type) {
@@ -21,22 +51,15 @@ const reducer = (state=initialState,action) => {
                 ingredients: action.payload
             }
         case INCREMENTS:
-            const data = [...state.ingredients]
             return {
                 ...state,
-                // ingredients: {
-                //     ...state.ingredients,
-                //     [action.payload]: state.ingredients[action.payload] + 1
-                // },
-                // price: state.price + priceList[action.payload]
+                ingredients: updateIncrements(state.ingredients,action.payload),
+                 price: state.price + priceList[action.payload]
             }
         case DECREMENTS:
             return {
                 ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    [action.payload]: state.ingredients[action.payload] - 1
-                },
+                ingredients: updateDecrements(state.ingredients,action.payload),
                 price: state.price - priceList[action.payload]
             }
     }

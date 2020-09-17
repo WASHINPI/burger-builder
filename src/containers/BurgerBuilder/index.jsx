@@ -10,15 +10,6 @@ import Example from "../../components/Modal";
 
 const BurgerBuilder = props => {
 
-   // const[price, setPrice] = useState(4)
-
-    const [ingPrice, setIngPrice] = useState({
-        cheese: 0.60,
-          meat: 0.50,
-         bacon:0.30,
-         salad: .70
-    })
-
     const [show, setShow] = useState(false);
 
     useEffect(() => {
@@ -27,51 +18,16 @@ const BurgerBuilder = props => {
     },[]);
 
     const handleClose = () => setShow(false);
+
     const handleShow = () => setShow(true);
 
-    const incrementIng = (ing) => {
-
-        props.increments(ing);
-
-        // let newIng = props.ingredients.map(item => {
-        //     if(item.name === ing ) {
-        //         item.value = item.value + 1;
-        //     }
-        //     return item;
-        // })
-
-       // const totalPrice = props.price + ingPrice[ing]
-       // setPrice(totalPrice)
-       // setIngredients(newIng)
-    }
-
-    const decrementIng = (ing) => {
-
-        props.decrements(ing);
-
-        // let newIng = props.ingredients.map(item => {
-        //     if(item.name === ing ) {
-        //         item.value = item.value - 1;
-        //     }
-        //     return item;
-        // })
-        //
-        // const totalPrice = props.price - ingPrice[ing]
-      //  setPrice(totalPrice)
-      //  setIngredients(newIng)
-    }
-
     const checkQty = (ing) => {
-      // return !props.ingredients.some(item => item.name === ing && item.value >= 1)
-        return false
+       return !props.ingredients.some(item => item.name === ing && item.value >= 1)
     }
 
     const validateOrder = () => {
-      // return !props.ingredients.some(item => item.value !== 0);
-        return false;
+       return !props.ingredients.some(item => item.value !== 0);
     }
-
-    console.log("this is props",props.ingredients )
 
     return (
 
@@ -84,29 +40,29 @@ const BurgerBuilder = props => {
 
                 <Controls
                     label="Cheese"
-                    less={() => decrementIng('cheese')}
-                    more={() => incrementIng('cheese')}
+                    less={() => props.decrements('cheese')}
+                    more={() => props.increments('cheese')}
                     disable={checkQty('cheese')}
                 />
 
                 <Controls
                     label="Meat"
-                    less={() => decrementIng('meat')}
-                    more={() => incrementIng('meat')}
+                    less={() => props.decrements('meat')}
+                    more={() => props.increments('meat')}
                     disable={checkQty('meat')}
                 />
 
                 <Controls
                     label="Bacon"
-                    less={() => decrementIng('bacon')}
-                    more={() => incrementIng('bacon')}
+                    less={() => props.decrements('bacon')}
+                    more={() => props.increments('bacon')}
                     disable={checkQty('bacon')}
                 />
 
                 <Controls
                     label="Salad"
-                    less={() => decrementIng('salad')}
-                    more={() => incrementIng('salad')}
+                    less={() => props.decrements('salad')}
+                    more={() => props.increments('salad')}
                     disable={checkQty('salad')}
                 />
                 <Example
@@ -132,7 +88,7 @@ const mapStateToProps = state =>({
 
 const mapDispatchToProps = dispatch => ({
     onLoadIngredient: () => dispatch(loadIngredients()),
-    increments: (data) => dispatch(incrementsIngredients(data)),
+    increments: data => dispatch(incrementsIngredients(data)),
     decrements: data => dispatch(decrementsIngredients(data))
 })
 
