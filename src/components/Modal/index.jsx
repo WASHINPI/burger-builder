@@ -1,12 +1,22 @@
 import React,{ useState } from "react";
+import { Redirect } from 'react-router-dom'
 
 import {Button, Modal } from "react-bootstrap";
 
 
 const Example = props => {
 
+    const [redirect, setRedirect] = useState(false)
+
+    const loadCheckout = () => {
+        setRedirect(true)
+    }
+
     return (
         <>
+            {
+                redirect ? <Redirect to="/checkout"/> : null
+            }
             <Modal show={props.show} onHide={props.handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Your Order</Modal.Title>
@@ -23,7 +33,7 @@ const Example = props => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={props.handleClose}>Cancle</Button>
-                    <Button variant="primary" onClick={props.handleClose}>Continue</Button>
+                    <Button variant="primary" onClick={loadCheckout}>Continue</Button>
                 </Modal.Footer>
             </Modal>
         </>

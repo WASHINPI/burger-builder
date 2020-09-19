@@ -1,7 +1,25 @@
 import { LOAD_INGREDIENTS, INCREMENTS, DECREMENTS } from "../actionTypes";
 
 const initialState = {
-    ingredients: [],
+  //  ingredients: [],
+    ingredients: [
+        {
+            name: 'cheese',
+            value: 0
+        },
+        {
+            name: 'meat',
+            value: 0
+        },
+        {
+            name: 'bacon',
+            value: 0
+        },
+        {
+            name: 'salad',
+            value: 0
+        }
+    ],
     price: 5
 }
 
@@ -62,9 +80,9 @@ const reducer = (state=initialState,action) => {
                 ingredients: updateDecrements(state.ingredients,action.payload),
                 price: state.price - priceList[action.payload]
             }
+        default:
+            return state;
     }
-
-    return state;
 }
 
 export default reducer;
